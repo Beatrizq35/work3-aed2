@@ -1,43 +1,48 @@
 #include "IndiceArvBST.h"
+#include <stdio.h>
+#include <stdlib.h>
 
-static NoBST *criarNoBST(int chave, long num_reg) {
-    NoBST *novo = (NoBST *) malloc(sizeof(NoBST));
-    if (!novo) { perror("malloc NoBST"); exit(EXIT_FAILURE); }
-    novo->chave   = chave;
-    novo->num_reg = num_reg;
-    novo->esq     = NULL;
-    novo->dir     = NULL;
-    return novo;
-}
-
-NoBST *bstInserir(NoBST *raiz, int chave, long num_reg) {
-    if (raiz == NULL)
-        return criarNoBST(chave, num_reg);
-    if (chave < raiz->chave)
-        raiz->esq = bstInserir(raiz->esq, chave, num_reg);
-    else if (chave > raiz->chave)
-        raiz->dir = bstInserir(raiz->dir, chave, num_reg);
-    /* duplicata: ignora */
+NoBST* inserirBST(NoBST* raiz, int valor, int rrn) {
+    if (raiz == NULL) {
+        NoBST* novo = (NoBST*)malloc(sizeof(NoBST));
+        novo->valor = valor;
+        novo->rrn = rrn;
+        novo->esq = novo->dir = NULL;
+        return novo;
+    }
+    // <= para permitir idades repetidas no índice secundário
+    if (valor <= raiz->valor) 
+        raiz->esq = inserirBST(raiz->esq, valor, rrn);
+    else 
+        raiz->dir = inserirBST(raiz->dir, valor, rrn);
+    
     return raiz;
 }
 
-long bstBuscar(NoBST *raiz, int chave) {
-    if (raiz == NULL)          return -1;
-    if (chave == raiz->chave)  return raiz->num_reg;
-    if (chave < raiz->chave)   return bstBuscar(raiz->esq, chave);
-    return bstBuscar(raiz->dir, chave);
+int buscarBST(NoBST* raiz, int valor) {
+    if (raiz == NULL) return -1;
+    if (raiz->valor == valor) return raiz->rrn;
+    if (valor < raiz->valor) return buscarBST(raiz->esq, valor);
+    return buscarBST(raiz->dir, valor);
 }
 
-void bstEmOrdem(NoBST *raiz) {
+void buscarIntervaloBST(NoBST* raiz, int min, int max, int* resultados, int* qtd) {
     if (raiz == NULL) return;
-    bstEmOrdem(raiz->esq);
-    printf("  <chave=%d, reg=%ld>\n", raiz->chave, raiz->num_reg);
-    bstEmOrdem(raiz->dir);
+    
+    if (raiz->valor >= min) buscarIntervaloBST(raiz->esq, min, max, resultados, qtd);
+    
+    if (raiz->valor >= min && raiz->valor <= max) {
+        resultados[*qtd] = raiz->rrn;
+        (*qtd)++;
+    }
+    
+    if (raiz->valor <= max) buscarIntervaloBST(raiz->dir, min, max, resultados, qtd);
 }
 
-void bstDestruir(NoBST *raiz) {
-    if (raiz == NULL) return;
-    bstDestruir(raiz->esq);
-    bstDestruir(raiz->dir);
-    free(raiz);
+void emOrdemBST(NoBST* raiz) {
+    if (raiz != NULL) {
+        emOrdemBST(raiz->esq);
+        printf("<Valor: %d, RRN: %d> ", raiz->valor, raiz->rrn);
+        emOrdemBST(raiz->dir);
+    }
 }

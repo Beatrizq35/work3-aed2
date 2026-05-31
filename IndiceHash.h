@@ -1,35 +1,22 @@
-#ifndef INDICEHASH_H
-#define INDICEHASH_H
+#ifndef INDICE_HASH_H
+#define INDICE_HASH_H
 
-#include <stdio.h>
-#include <stdlib.h>
+#define HASH_SIZE 97 // Tamanho primo para gerar algumas colisões controladas
 
-/* ================================================================
- * TAD IndiceHash
- * Tabela hash com encadeamento separado.
- * Armazena pares <chave (int), num_registro (long)>.
- * Tamanho primo escolhido para provocar algumas colisões
- * com TOTAL_REGS registros.
- * ================================================================ */
-
-#define HASH_TAM 4999   /* primo; com 5000 regs gera ~1 colisão */
-
-typedef struct NoCelula {
-    int             chave;
-    long            num_reg;
-    struct NoCelula *prox;
-} NoCelula;
+typedef struct NoHash {
+    int chave;
+    int rrn;
+    struct NoHash* prox;
+} NoHash;
 
 typedef struct {
-    NoCelula *tabela[HASH_TAM];
-    int       totalColisoes;
-} IndiceHash;
+    NoHash* tabela[HASH_SIZE];
+    int colisoes; // Contador de colisões
+} TabelaHash;
 
-IndiceHash *hashCriar   (void);
-void        hashInserir (IndiceHash *h, int chave, long num_reg);
-long        hashBuscar  (IndiceHash *h, int chave); /* -1 se nao encontrado */
-void        hashImprimir(IndiceHash *h);
-int         hashColisoes(IndiceHash *h);
-void        hashDestruir(IndiceHash *h);
+void inicializarHash(TabelaHash* th);
+void inserirHash(TabelaHash* th, int chave, int rrn);
+int buscarHash(TabelaHash* th, int chave);
+void imprimirHash(TabelaHash* th);
 
-#endif /* INDICEHASH_H */
+#endif

@@ -1,26 +1,15 @@
-#ifndef INDICEARV_BST_H
-#define INDICEARV_BST_H
-
-#include <stdio.h>
-#include <stdlib.h>
-
-/* ================================================================
- * TAD IndiceArvBST
- * Árvore binária de pesquisa que armazena pares
- * <chave (int), numero_registro (long)>.
- * Usada como índice do atributo chave (id).
- * ================================================================ */
+#ifndef INDICE_ARV_BST_H
+#define INDICE_ARV_BST_H
 
 typedef struct NoBST {
-    int           chave;
-    long          num_reg;
-    struct NoBST *esq;
-    struct NoBST *dir;
+    int valor; // Pode ser a matrícula (chave) ou a idade
+    int rrn;   // Número do registro no arquivo (Relative Record Number)
+    struct NoBST *esq, *dir;
 } NoBST;
 
-NoBST *bstInserir(NoBST *raiz, int chave, long num_reg);
-long   bstBuscar (NoBST *raiz, int chave);   /* retorna num_reg ou -1 */
-void   bstEmOrdem(NoBST *raiz);              /* imprime pares em ordem */
-void   bstDestruir(NoBST *raiz);
+NoBST* inserirBST(NoBST* raiz, int valor, int rrn);
+int buscarBST(NoBST* raiz, int valor); // Retorna o RRN
+void emOrdemBST(NoBST* raiz); // Para testes pequenos
+void buscarIntervaloBST(NoBST* raiz, int min, int max, int* resultados, int* qtd); // Para >, <
 
-#endif /* INDICEARV_BST_H */
+#endif

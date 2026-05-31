@@ -1,55 +1,35 @@
 #include "BuscaSeq.h"
+#include <stdio.h>
 
-long buscaSeqChave(FILE *arq, long totalRegs, int id) {
+int buscaSequencialChave(const char* nomeArquivo, int chaveDesejada, Registro* outReg) {
+    FILE *arq = fopen(nomeArquivo, "rb");
+    if (!arq) return -1;
+    
     Registro r;
-    long i;
-    for (i = 0; i < totalRegs; i++) {
-        registroLer(arq, i, &r);
-        if (r.id == id) return i;
+    int rrn = 0;
+    while (fread(&r, sizeof(Registro), 1, arq)) {
+        if (r.matricula == chaveDesejada) {
+            *outReg = r;
+            fclose(arq);
+            return rrn;
+        }
+        rrn++;
     }
+    fclose(arq);
     return -1;
 }
 
-int buscaSeqMaiorQue(FILE *arq, long totalRegs, double valor, long *resultado, int cap) {
+void buscaSequencialIntervalo(const char* nomeArquivo, int idadeMin, int idadeMax, Registro* resultados, int* qtd) {
+    FILE *arq = fopen(nomeArquivo, "rb");
+    if (!arq) return;
+    
     Registro r;
-    long i;
-    int qtd = 0;
-    for (i = 0; i < totalRegs && qtd < cap; i++) {
-        registroLer(arq, i, &r);
-        if (r.cr > valor) resultado[qtd++] = i;
+    *qtd = 0;
+    while (fread(&r, sizeof(Registro), 1, arq)) {
+        if (r.idade >= idadeMin && r.idade <= idadeMax) {
+            resultados[*qtd] = r;
+            (*qtd)++;
+        }
     }
-    return qtd;
-}
-#Foi escolhido o maior igual (Depois apagar o resto)
-int buscaSeqMaiorIgual(FILE *arq, long totalRegs, double valor, long *resultado, int cap) {
-    Registro r;
-    long i;
-    int qtd = 0;
-    for (i = 0; i < totalRegs && qtd < cap; i++) {
-        registroLer(arq, i, &r);
-        if (r.cr >= valor) resultado[qtd++] = i;
-    }
-    return qtd;
-}
-
-int buscaSeqMenorQue(FILE *arq, long totalRegs, double valor, long *resultado, int cap) {
-    Registro r;
-    long i;
-    int qtd = 0;
-    for (i = 0; i < totalRegs && qtd < cap; i++) {
-        registroLer(arq, i, &r);
-        if (r.cr < valor) resultado[qtd++] = i;
-    }
-    return qtd;
-}
-
-int buscaSeqMenorIgual(FILE *arq, long totalRegs, double valor, long *resultado, int cap) {
-    Registro r;
-    long i;
-    int qtd = 0;
-    for (i = 0; i < totalRegs && qtd < cap; i++) {
-        registroLer(arq, i, &r);
-        if (r.cr <= valor) resultado[qtd++] = i;
-    }
-    return qtd;
+    fclose(arq);
 }

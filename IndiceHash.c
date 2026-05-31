@@ -1,73 +1,42 @@
 #include "IndiceHash.h"
+#include <stdio.h>
+#include <stdlib.h>
 
-static int hashFn(int chave) {
-    int h = chave % HASH_TAM;
-    if (h < 0) h += HASH_TAM;
-    return h;
+void inicializarHash(TabelaHash* th) {
+    for (int i = 0; i < HASH_SIZE; i++) th->tabela[i] = NULL;
+    th->colisoes = 0;
 }
 
-IndiceHash *hashCriar(void) {
-    IndiceHash *h = (IndiceHash *) malloc(sizeof(IndiceHash));
-    if (!h) { perror("malloc IndiceHash"); exit(EXIT_FAILURE); }
-    int i;
-    for (i = 0; i < HASH_TAM; i++) h->tabela[i] = NULL;
-    h->totalColisoes = 0;
-    return h;
+void inserirHash(TabelaHash* th, int chave, int rrn) {
+    int pos = chave % HASH_SIZE; // Função Hash simples
+    
+    NoHash* novo = (NoHash*)malloc(sizeof(NoHash));
+    novo->chave = chave;
+    novo->rrn = rrn;
+    novo->prox = th->tabela[pos];
+    
+    if (th->tabela[pos] != NULL) th->colisoes++; // Colisão detectada
+    
+    th->tabela[pos] = novo;
 }
 
-void hashInserir(IndiceHash *h, int chave, long num_reg) {
-    int idx = hashFn(chave);
-    if (h->tabela[idx] != NULL)
-        h->totalColisoes++;
-
-    NoCelula *novo = (NoCelula *) malloc(sizeof(NoCelula));
-    if (!novo) { perror("malloc NoCelula"); exit(EXIT_FAILURE); }
-    novo->chave   = chave;
-    novo->num_reg = num_reg;
-    novo->prox    = h->tabela[idx];
-    h->tabela[idx] = novo;
-}
-
-long hashBuscar(IndiceHash *h, int chave) {
-    int idx = hashFn(chave);
-    NoCelula *p = h->tabela[idx];
-    while (p) {
-        if (p->chave == chave) return p->num_reg;
-        p = p->prox;
+int buscarHash(TabelaHash* th, int chave) {
+    int pos = chave % HASH_SIZE;
+    NoHash* atual = th->tabela[pos];
+    while (atual != NULL) {
+        if (atual->chave == chave) return atual->rrn;
+        atual = atual->prox;
     }
     return -1;
 }
 
-void hashImprimir(IndiceHash *h) {
-    int i;
-    printf("=== Tabela Hash (buckets ocupados) ===\n");
-    for (i = 0; i < HASH_TAM; i++) {
-        if (h->tabela[i]) {
-            printf("  [%4d]: ", i);
-            NoCelula *p = h->tabela[i];
-            while (p) {
-                printf("<chave=%d, reg=%ld> ", p->chave, p->num_reg);
-                p = p->prox;
-            }
-            printf("\n");
+void imprimirHash(TabelaHash* th) {
+    for (int i = 0; i < HASH_SIZE; i++) {
+        NoHash* atual = th->tabela[i];
+        while (atual != NULL) {
+            printf("<Chave: %d, RRN: %d> ", atual->chave, atual->rrn);
+            atual = atual->prox;
         }
     }
-    printf("  Total de colisoes: %d\n", h->totalColisoes);
-}
-
-int hashColisoes(IndiceHash *h) {
-    return h->totalColisoes;
-}
-
-void hashDestruir(IndiceHash *h) {
-    int i;
-    for (i = 0; i < HASH_TAM; i++) {
-        NoCelula *p = h->tabela[i];
-        while (p) {
-            NoCelula *tmp = p->prox;
-            free(p);
-            p = tmp;
-        }
-    }
-    free(h);
+    printf("\n");
 }
