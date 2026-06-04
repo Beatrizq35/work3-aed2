@@ -3,6 +3,8 @@
 #include "Registro.h"
 
 int buscaSequencialChave(const char* nomeArquivo, int chaveDesejada, Registro* outReg);
-void buscaSequencialIntervalo(const char* nomeArquivo, int idadeMin, int idadeMax, Registro* resultados, int* qtd);
+
+// A declaração agora usa os floats corretamente
+void buscaSequencialIntervalo(const char* nomeArquivo, float crMin, float crMax, Registro* resultados, int* qtd);
 
 #endif
