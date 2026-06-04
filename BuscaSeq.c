@@ -1,6 +1,7 @@
 #include "BuscaSeq.h"
 #include <stdio.h>
 
+// Função 1: Busca a matrícula exata (Estratégia 3)
 int buscaSequencialChave(const char* nomeArquivo, int chaveDesejada, Registro* outReg) {
     FILE *arq = fopen(nomeArquivo, "rb");
     if (!arq) return -1;
@@ -19,14 +20,15 @@ int buscaSequencialChave(const char* nomeArquivo, int chaveDesejada, Registro* o
     return -1;
 }
 
-void buscaSequencialIntervalo(const char* nomeArquivo, int idadeMin, int idadeMax, Registro* resultados, int* qtd) {
+// Função 2: Busca por intervalo usando o CR (Estratégia 5)
+void buscaSequencialIntervalo(const char* nomeArquivo, float crMin, float crMax, Registro* resultados, int* qtd) {
     FILE *arq = fopen(nomeArquivo, "rb");
     if (!arq) return;
     
     Registro r;
     *qtd = 0;
     while (fread(&r, sizeof(Registro), 1, arq)) {
-        if (r.idade >= idadeMin && r.idade <= idadeMax) {
+        if (r.cr >= crMin && r.cr <= crMax) {
             resultados[*qtd] = r;
             (*qtd)++;
         }
