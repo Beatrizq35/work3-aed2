@@ -1,7 +1,7 @@
 #ifndef INDICE_HASH_H
 #define INDICE_HASH_H
 
-#define HASH_SIZE 97 // Tamanho primo para gerar algumas colisões controladas
+#define HASH_SIZE 4903 // Tamanho primo para gerar algumas colisões controladas
 
 typedef struct NoHash {
     int chave;
