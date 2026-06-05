@@ -2,7 +2,7 @@
 #define INDICE_ARV_BST_H
 
 typedef struct NoBST {
-    float valor; // <-- MUDOU PARA FLOAT para aceitar o CR (ex: 8.5)
+    float valor;
     int rrn;   
     struct NoBST *esq, *dir;
 } NoBST;

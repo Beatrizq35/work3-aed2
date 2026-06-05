@@ -7,7 +7,7 @@ int buscaSequencialChave(const char* nomeArquivo, int chaveDesejada, Registro* o
     if (!arq) return -1;
     
     Registro r;
-    int rrn = 0;
+    int rrn = 0; // Posição do aluno no registro no arquivo, começando de 0
     while (fread(&r, sizeof(Registro), 1, arq)) {
         if (r.matricula == chaveDesejada) {
             *outReg = r;

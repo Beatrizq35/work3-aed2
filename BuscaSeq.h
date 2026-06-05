@@ -4,7 +4,6 @@
 
 int buscaSequencialChave(const char* nomeArquivo, int chaveDesejada, Registro* outReg);
 
-// A declaração agora usa os floats corretamente
 void buscaSequencialIntervalo(const char* nomeArquivo, float crMin, float crMax, Registro* resultados, int* qtd);
 
 #endif

@@ -24,8 +24,8 @@ Registro lerRegistroPorRRN(FILE* arq, int rrn) {
 
 void imprimirTabelaChave(const char* titulo, Registro regs[], double tempos[], int qtd) {
     printf("\n");
-    printf("+-----------------------------------------------------------------------------------------+\n");
-    printf("| %-87s |\n", titulo);
+    printf("+---------------------------------------------------------------------------------------+\n");
+    printf("| %-85s |\n", titulo);
     printf("+----+-----------+--------------------+-------+------+--------------+-------------------+\n");
     printf("| Ex | Matricula | Nome               | Idade | CR   | Curso        | Tempo (segs)      |\n");
     printf("+----+-----------+--------------------+-------+------+--------------+-------------------+\n");
@@ -40,7 +40,7 @@ void imprimirTabelaChave(const char* titulo, Registro regs[], double tempos[], i
     
     printf("+----+-----------+--------------------+-------+------+--------------+-------------------+\n");
     printf("| Tempo Medio: %-72.6f |\n", soma / qtd);
-    printf("+-----------------------------------------------------------------------------------------+\n");
+    printf("+---------------------------------------------------------------------------------------+\n");
 }
 
 void imprimirTabelaIntervaloCR(const char* titulo, float crs[], int qtdResultados[], double tempos[], int qtd) {
@@ -48,12 +48,12 @@ void imprimirTabelaIntervaloCR(const char* titulo, float crs[], int qtdResultado
     printf("+----------------------------------------------------------------------+\n");
     printf("| %-68s |\n", titulo);
     printf("+----------+---------------+-----------------+-------------------------+\n");
-    printf("| Execucao | CR (>= X)     | Qtd Encontrada  | Tempo de Execucao (segs)|\n");
+    printf("| Execucao | Intervalo CR  | Qtd Encontrada  | Tempo de Execucao (segs)|\n");
     printf("+----------+---------------+-----------------+-------------------------+\n");
     
     double soma = 0;
     for (int i = 0; i < qtd; i++) {
-        printf("| %-8d | %-13.1f | %-15d | %-23.6f |\n", i + 1, crs[i], qtdResultados[i], tempos[i]);
+        printf("| %-8d | %.1f a %.1f     | %-15d | %-23.6f |\n", i + 1, crs[i], crs[i] + 2.0, qtdResultados[i], tempos[i]);
         soma += tempos[i];
     }
     
@@ -72,7 +72,7 @@ int main() {
     
     NoBST* arvChave = NULL;  
     TabelaHash hashChave;    
-    NoBST* arvCR = NULL;  // Árvore agora é para o CR
+    NoBST* arvCR = NULL; 
     
     inicializarHash(&hashChave);
 
@@ -91,14 +91,14 @@ int main() {
     
     // --- PREPARAÇÃO DOS DADOS DE TESTE ---
     int chavesParaBuscar[QTD_BUSCAS];
-    float crsParaBuscar[QTD_BUSCAS]; // Vetor agora armazena os CRs sorteados
+    float crsParaBuscar[QTD_BUSCAS]; // Vetor armazena os CRs sorteados
     
     for(int i=0; i<QTD_BUSCAS; i++) {
         chavesParaBuscar[i] = 1000 + (rand() % QTD_REGISTROS);
         crsParaBuscar[i] = (float)(rand() % 80) / 10.0; // Sorteia um CR de 0.0 a 8.0 para a busca
     }
     
-    clock_t start, end; // Variáveis de tempo padronizadas pelo professor
+    clock_t start, end; // Variáveis de tempo padronizadas
     double tempos[QTD_BUSCAS];
     int qtdEncontrada[QTD_BUSCAS];
 
