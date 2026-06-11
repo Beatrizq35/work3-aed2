@@ -142,7 +142,7 @@ int main() {
         end = clock();
         tempos[i] = ((double) end - start) / CLOCKS_PER_SEC;
     }
-    imprimirTabelaChave("3) Busca Sequencial em Disco (Atributo Chave: Matricula)", regsEstrategia3, tempos, QTD_BUSCAS);
+    imprimirTabelaChave("3) Busca Sequencial (Atributo Chave: Matricula)", regsEstrategia3, tempos, QTD_BUSCAS);
 
     // =======================================================================
     // ESTRATÉGIA 4: Busca de intervalo (>=) usando BST para atributo nao-chave (CR)
